@@ -34,7 +34,7 @@ public class StoreOnDespawnPlugin extends JavaPlugin implements Listener {
 	public boolean despawn(Item i) {
 		World w = i.getWorld();
 		SortedMap<Double, Inventory> storage = new TreeMap<>();
-		Location center = i.getLocation();
+		Location center = i.getLocation().subtract(0.5D, 0.5D, 0.5D);
 		for(int x = -radius; x <= radius; x++) for(int y = -radius; y <= radius; y++) for(int z = -radius; z <= radius; z++) {
 			Location cursor = center.clone().add(x, y, z);
 			BlockState bs = cursor.getBlock().getState();
