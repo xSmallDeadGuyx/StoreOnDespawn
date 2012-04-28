@@ -102,6 +102,7 @@ public class StoreOnDespawnPlugin extends JavaPlugin implements Listener {
 		if(cmd.getName().equalsIgnoreCase("despawn-radius") && args.length == 1) {
 			radius = Integer.parseInt(args[0]);
 			getConfig().set("despawn.radius", radius);
+			return true;
 		}
 		return false;
 	}
