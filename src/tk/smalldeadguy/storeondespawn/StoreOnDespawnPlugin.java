@@ -30,37 +30,32 @@ public class StoreOnDespawnPlugin extends JavaPlugin implements Listener {
 
 	public boolean despawn(Item i) {
 		World w = i.getWorld();
-		for(int x = 0; x <= radius; x++) for(int y = 0; y <= radius; y++) for(int z = 0; z <= radius; z++) {
-			Location[] ls = {
-					new Location(w,  x,  y,  z),
-					new Location(w,  x,  y, -z),
-					new Location(w,  x, -y,  z),
-					new Location(w,  x, -y, -z),
-					new Location(w, -x,  y,  z),
-					new Location(w, -x,  y, -z),
-					new Location(w, -x, -y,  z),
-					new Location(w, -x, -y, -z)
-			};
-			for(Location l : ls) {
-				Block b = w.getBlockAt(i.getLocation().add(l));
-				if(b.getState() instanceof InventoryHolder) {
-					InventoryHolder c = (InventoryHolder) b.getState();
-					Inventory inv = c.getInventory();
-					int index = inv.firstEmpty();
-					Map<Integer, ItemStack> didntFit = inv.addItem(i.getItemStack());
-					
-					if(didntFit.size() == 0) {
-						i.remove();
-						return true;
-					}
-					
-					i.setItemStack((ItemStack) didntFit.values().toArray()[0]);
-					
-					if(i.getItemStack() == null || i.getItemStack().getAmount() == 0) {
-						i.remove();
-						return true;
-					}
-				}
+		SortedMap<Float, Inventory> storage = new TreeMap<>();
+		Location center = i.getLocation();
+		for(int x = -radius; x <= radius; x++) for(int y = -radius; y <= radius; y++) for(int z = -radius; z <= radius; z++) {
+			Location cursor = center.clone().add(x, y, z)
+
+			BlockState bs = cursor.getBlock().getState();
+
+			if(bs instanceof InventoryHolder) {
+				storage.put(cursor.distance(center), ((InventoryHolder) bs).getInventory())
+			}
+		}
+
+		for(Inventory inv : storage.values()) {
+			int index = inv.firstEmpty();
+			Map<Integer, ItemStack> didntFit = inv.addItem(i.getItemStack());
+			
+			if(didntFit.size() == 0) {
+				i.remove();
+				return true;
+			}
+			
+			i.setItemStack((ItemStack) didntFit.values().toArray()[0]);
+			
+			if(i.getItemStack() == null || i.getItemStack().getAmount() == 0) {
+				i.remove();
+				return true;
 			}
 		}
 		return false;
