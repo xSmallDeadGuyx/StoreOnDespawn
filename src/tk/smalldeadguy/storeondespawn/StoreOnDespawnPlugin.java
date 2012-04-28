@@ -1,6 +1,8 @@
 package tk.smalldeadguy.storeondespawn;
 
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
@@ -8,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.ContainerBlock;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -30,18 +33,16 @@ public class StoreOnDespawnPlugin extends JavaPlugin implements Listener {
 
 	public boolean despawn(Item i) {
 		World w = i.getWorld();
-		SortedMap<Float, Inventory> storage = new TreeMap<>();
+		SortedMap<Double, Inventory> storage = new TreeMap<>();
 		Location center = i.getLocation();
 		for(int x = -radius; x <= radius; x++) for(int y = -radius; y <= radius; y++) for(int z = -radius; z <= radius; z++) {
-			Location cursor = center.clone().add(x, y, z)
-
+			Location cursor = center.clone().add(x, y, z);
 			BlockState bs = cursor.getBlock().getState();
 
-			if(bs instanceof InventoryHolder) {
-				storage.put(cursor.distance(center), ((InventoryHolder) bs).getInventory())
-			}
+			if(bs instanceof InventoryHolder)
+				storage.put(cursor.distance(center), ((InventoryHolder) bs).getInventory());
 		}
-
+		
 		for(Inventory inv : storage.values()) {
 			int index = inv.firstEmpty();
 			Map<Integer, ItemStack> didntFit = inv.addItem(i.getItemStack());
