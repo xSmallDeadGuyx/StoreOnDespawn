@@ -1,0 +1,3 @@
+Store On Despawn
+================
+A minecraft bukkit server plugin that makes items attempt to fit inside nearby container blocks (e.g. chests, dispensers) when it's time to despawn. The radius at which it checks can be adjusted and a despawn check can also be forced

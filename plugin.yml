@@ -1,0 +1,16 @@
+name: StoreOnDespawnPlugin
+main: tk.smalldeadguy.storeondespawn.StoreOnDespawnPlugin
+version: 0.1.0
+
+commands:
+   despawn:
+      description: Attempts to despawn all items into chests
+      usage: /<command> 
+      permission: storeondespawn.despawn
+      permission-message: Not allowed!
+      
+   despawn-radius:
+      description: Set the radius of the item despawn test
+      usage: /<command> <radius>
+      permission: storeondespawn.radius
+      permission-message: Not allowed!
